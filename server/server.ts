@@ -1,6 +1,7 @@
 // magic incantations
 // tsc (to compile server)
 // ng build (to compile client)
+// ng build --aot (compile client with AOT)
 // "\program files\mongodb\server\3.2\bin\mongod"
 // "\program files\mongodb\server\3.2\bin\mongorestore" --db matchdb --drop matchdb
 // set NODE_ENV=development& node server.js
