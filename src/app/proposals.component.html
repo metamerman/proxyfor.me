@@ -1,0 +1,28 @@
+<nav>
+  <table class="table">
+    <thead>
+      <tr>
+        <th class="id">ID</th>
+        <th>Vote</th>        
+        <th>Title</th>
+        <th>Close Date</th>
+        <th>Close Vote</th>
+        <th>Current Vote</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let proposal of globalService.proposalHeads">
+        <td><a [routerLink]="['/proposal/', proposal.id + 'v' + proposal.version]">{{proposal.id}}v{{proposal.version}}</a></td>
+        <td>{{getVote(proposal.id)}}</td>
+        <td>{{proposal.title}}</td>        
+        <td><span *ngIf="proposal.close_date">{{getDate(proposal)}}</span></td>
+        <td><span *ngIf="proposal.close_date" class="results">{{proposal.close_yes_votes > proposal.close_no_votes ? "Passed" : "Failed"}}
+             <span class="yes">{{proposal.close_yes_votes}}</span> to <span class="no">{{proposal.close_no_votes}}</span></span>
+        </td>
+        <td><span *ngIf="proposal.close_date" class="results">
+             <span class="yes">{{proposal.yes_votes}}</span> to <span class="no">{{proposal.no_votes}}</span></span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</nav>

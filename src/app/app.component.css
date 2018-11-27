@@ -1,0 +1,44 @@
+h1 {
+  font-size: 1.2em;
+/*  color: #999;*/
+  color: #00f;
+  margin-bottom: 0;
+}
+h2 {
+  font-size: 2em;
+  margin-top: 0;
+  padding-top: 0;
+}
+.title {
+  margin-top: 20px;
+  font-size: 1.8em;
+}
+.header-bar {
+  background-color: rgb(0,120,215);
+  height: 4px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+ul { padding: 0.2em; }
+nav ul li:first-child {
+  margin-top: 0.3em;
+  float: left;
+}
+nav ul li {
+  list-style: none;
+  float: right;
+}
+nav ul li:nth-child(2) {
+  float: left;
+  margin-left: 1em;  
+}
+.results {
+  margin-top: 10px;
+  float: right;
+}
+.yes {
+  color: #690;;
+}
+.no {
+  color: #DD4A68
+}

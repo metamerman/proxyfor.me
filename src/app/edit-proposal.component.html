@@ -1,0 +1,92 @@
+<div class="container">
+    <h1>Edit Proposal</h1>
+    <alert></alert>
+    <form [formGroup]="pForm" *ngIf="active" (ngSubmit)="onSubmit()">
+        <div class="form-group">
+            <label for="id">ID</label>
+            <input type="text" id="id" class="form-control" formControlName="id">
+            <div *ngIf="formErrors.id" class="alert alert-danger">
+                {{ formErrors.id }}
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="version">Version</label>
+            <input type="text" id="version" class="form-control" formControlName="version">
+            <div *ngIf="formErrors.version" class="alert alert-danger">
+                {{ formErrors.version }}
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="title">Title</label>
+            <input type="text" id="title" class="form-control" formControlName="title">
+            <div *ngIf="formErrors.title" class="alert alert-danger">
+                {{ formErrors.title }}
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="proposer">Proposer</label>
+            <input type="text" id="proposer" class="form-control" formControlName="proposer">
+            <div *ngIf="formErrors.proposer" class="alert alert-danger">
+                {{ formErrors.proposer }}
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="abstract">Abstract</label>
+            <textarea rows="3" id="abstract" class="form-control" formControlName="abstract"></textarea>
+            <div *ngIf="formErrors.abstract" class="alert alert-danger">
+                {{ formErrors.abstract }}
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="cost">Cost</label>
+            <textarea rows="3" id="cost" class="form-control" formControlName="cost"></textarea>
+            <div *ngIf="formErrors.cost" class="alert alert-danger">
+                {{ formErrors.cost }}
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="effective_date">Effective Date</label>
+            <textarea rows="3" id="effective_date" class="form-control" formControlName="effective_date"></textarea>
+            <div *ngIf="formErrors.effective_date" class="alert alert-danger">
+                {{ formErrors.effective_date }}
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="history">Version History</label>
+            <textarea rows="3" id="history" class="form-control" formControlName="history"></textarea>
+            <div *ngIf="formErrors.history" class="alert alert-danger">
+                {{ formErrors.history }}
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="justification">Justification</label>
+            <textarea rows="6" id="justification" class="form-control" formControlName="justification"></textarea>
+            <div *ngIf="formErrors.justification" class="alert alert-danger">
+                {{ formErrors.justification }}
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="full_text">Full Text</label>
+            <textarea rows="6" id="full_text" class="form-control" formControlName="full_text"></textarea>
+            <div *ngIf="formErrors.full_text" class="alert alert-danger">
+                {{ formErrors.full_text }}
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="q_a">Q &amp; A</label>
+            <textarea rows="6" id="q_a" class="form-control" formControlName="q_a"></textarea>
+            <div *ngIf="formErrors.q_a" class="alert alert-danger">
+                {{ formErrors.q_a }}
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="oe">Openness estimate</label>
+            <input type="text" id="oe" class="form-control" formControlName="oe">
+            <div *ngIf="formErrors.oe" class="alert alert-danger">
+                {{ formErrors.oe }}
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary" [disabled]="!pForm.valid">Submit</button>
+        <button type="button" class="btn btn-primary f_right" (click)="cancel()">Cancel</button>
+    </form>
+</div>

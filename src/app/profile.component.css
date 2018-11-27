@@ -1,0 +1,30 @@
+.odd {
+  background-color: #eee;
+}
+.even {
+  background-color: #ccc;
+}
+input {
+  font-size: 1em;
+  padding-left: .4em;
+}
+.bigradio {
+    margin: 4px 4px;
+    line-height: normal;
+    width: 2em;
+    height: 2em;
+    text-align: center
+}
+
+table {
+   border-collapse: collapse;
+   color: #000;
+   table-layout:auto;
+}
+td {
+    height: 4em;
+    padding: 1em;
+}
+td:nth-child(2) {
+    text-align: center;
+}

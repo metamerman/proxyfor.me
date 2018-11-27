@@ -1,0 +1,15 @@
+form {
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  margin-top: 15px;
+}
+
+input.ng-invalid.ng-dirty {
+  color: #a94442;
+  background-color: #f2dede;
+}
+
+.f_right {
+  float: right;
+}

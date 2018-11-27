@@ -1,0 +1,12 @@
+<div class="container">
+    <h1>Edit Q &amp; A</h1>
+    <alert></alert>
+    <form [formGroup]="pForm" *ngIf="active" (ngSubmit)="onSubmit()">
+        <div class="form-group">
+            <label for="q_a">Q &amp; A</label>
+            <textarea rows="6" id="q_a" class="form-control" formControlName="q_a"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+        <button type="button" class="btn btn-primary f_right" (click)="cancel()">Cancel</button>
+    </form>
+</div>

@@ -1,0 +1,252 @@
+<div *ngIf="profile">
+  <div *ngIf="!doMe">
+    <nav>
+      <div *ngIf="!globalService.myProfile.exclude?.includes(profile.screen_name)">
+        <h4>Profile for {{profile.screen_name}}, match quality {{profile.diff}}
+          <a (click)="exclude()">Don't Match to {{profile.screen_name}}</a>
+        </h4>
+      </div>
+      <div *ngIf="globalService.myProfile.exclude?.includes(profile.screen_name)">
+        <h4>Profile for {{profile.screen_name}}, match quality {{profile.diff}}
+          <a (click)="include(profile.screen_name)">Resume matching to {{profile.screen_name}}</a>
+        </h4>
+      </div>
+    </nav>
+  </div>
+  <tabs>
+    <div *ngIf="doMe && globalService.b5a && globalService.ia">
+      <tab tabTitle="Mini Match" [active]="globalService.activeTab === 'Mini Match'">
+        <p>To get your proxy matches and enable voting please fill out either this short form, or the complete form on
+          the next
+          tab. The long form will of course get you, and everyone who might be able to use your vote as a proxy, better
+          accuracy,
+          but this one provides 80% of the benefit in less than one minute whereas the long form takes roughly 10
+          minutes.
+          Note that you can always come back later and change your answers or fill out the long form.</p>
+        <p>Once you have completed all the questions click the &quot;Submit&quot; button at the bottom.</p>
+        <br>
+        <p>This first set of questions is a brief personality assessement for which you specify the degree to which you
+          agree
+          with each of the statements:</p>
+        <p>I ({{profile.screen_name}}) see myself as someone who...</p>
+        <table>
+          <tr *ngFor="let i of mini_b5i">
+            <td>{{globalService.b5a[i]}}</td>
+            <td>Strongly Disagree</td>
+            <td *ngFor="let item of range">
+              <input type="radio" [name]="'mb' + i" class="bigradio" (click)="b5r[i] = item" [checked]="item == b5r[i]">
+            </td>
+            <td>Strongly Agree</td>
+          </tr>
+        </table>
+        <br>
+        <br>
+        <p>This second set of questions assesses your perception of how your current government manages the resources
+          (time,
+          money, attention) we expend on them, from "Way too little", through "About right", to "Way too much":</p>
+        <table>
+          <tr *ngFor="let i of mini_wi">
+            <td>{{globalService.ia[i]}}</td>
+            <td>Way too little</td>
+            <td *ngFor="let item of range">
+              <input type="radio" [name]="'mi' + i" class="bigradio" (click)="ir[i] = item" [checked]="item == ir[i]">
+            </td>
+            <td>Way too much</td>
+          </tr>
+        </table>
+        <br>
+        <button type="submit" class="btn btn-primary" (click)="save()">Submit</button>
+      </tab>
+    </div>
+    <tab tabTitle="Full Match" [active]="globalService.activeTab === 'Full Match'">
+      <div *ngIf="doMe">
+        <p>To match you with the people who would most likely vote like you would, it is necessary to collect some
+          information
+          about you and how you see the world. There are two sets of statements, the first relate to general
+          personality
+          characteristics, and the second set to your priorities and perceptions of how power is distributed in
+          society.
+          Take your time and consider each statement carefully: The more accurate your responses are, the better the
+          matches
+          the system will be able to compute for you, and the less time you'll have to spend examining and possibly
+          over-riding
+          the proxies selected for you. It should take less than 10 minutes, and note that you can come back and
+          update your
+          responses at any time.</p>
+        <p>Once you have completed all the questions click the &quot;Submit&quot; button at the bottom.</p>
+        <br>
+        <p>This first set of statements concern your perception about yourself in a variety of situations. Your task
+          is to indicate
+          the strength of your agreement with each statement by selecting the corresponding radio button, ranging
+          from &quot;Strongly
+          Disagree&quot; on the left and &quot;Strongly Agree&quot; on the right. The button in middle means you
+          &quot;Neither
+          agree nor disagree&quot;.
+        </p>
+        <h4>I ({{profile.screen_name}}) see myself as someone who...</h4>
+      </div>
+      <div *ngIf="!doMe">
+        <h4>{{profile.screen_name}} sees themselves as someone who...</h4>
+      </div>
+      <table>
+        <tr *ngFor="let q of globalService.b5a; let i = index; let even = even; let odd = odd" [ngClass]="{ odd: odd, even: even }">
+          <td>{{i + 1}} {{q}}</td>
+          <td>Strongly Disagree</td>
+          <td *ngFor="let item of range">
+            <input type="radio" [name]="'b' + i" class="bigradio" (click)="b5r[i] = item" [checked]="item == b5r[i]"
+              [disabled]="!doMe">
+          </td>
+          <td>Strongly Agree</td>
+        </tr>
+      </table>
+      <br>
+      <br>
+      <div *ngIf="doMe">
+        <h4>Please rate each of these areas by how much of our collective resources (time, money, attention) we
+          expend on them,
+          <br> or on their behalf, from "Way too little", through "About right", to "Way too much":</h4>
+      </div>
+      <div *ngIf="!doMe">
+        <h4>How {{profile.screen_name}} rates each of these areas by how much of our collective resources (time,
+          money, attention)
+          we expend on them.</h4>
+      </div>
+      <table>
+        <tr *ngFor="let q of globalService.ia; let i = index; let even = even; let odd = odd" [ngClass]="{ odd: odd, even: even }">
+          <td>{{i + 45}}. {{q}}</td>
+          <td>Way too little</td>
+          <td *ngFor="let item of range">
+            <input type="radio" [name]="'i' + i" class="bigradio" (click)="ir[i] = item" [checked]="item == ir[i]"
+              [disabled]="!doMe">
+          </td>
+          <td>Way too much</td>
+        </tr>
+      </table>
+      <br>
+      <div *ngIf="doMe">
+        <button type="submit" class="btn btn-primary" (click)="save()">Submit</button>
+      </div>
+    </tab>
+    <tab tabTitle="Locality" [active]="globalService.activeTab === 'Locality'">
+      <br>
+      <alert></alert>
+      We can now authenticate voters in Colorado, so if you are registered to vote in that state please be sure to
+      complete the
+      "Voter ID" and "Date of Registration" fields. You can look up that information and copy and paste it into this
+      form
+      using the
+      <a href="https://www.sos.state.co.us/voter/pages/pub/olvr/findVoterReg.xhtml" target="_blank">Colorado
+        Secretary of State's web site.</a> Note that there should be no security concerns about doing this: No
+      personal
+      information is stored on this system (once the authentication is done, even the minimal information you enter
+      is not
+      stored in any way that it can be traced back to you). If you live in other places it would be useful to have
+      some general
+      information about where you live to gauge interest which will help us choose areas to focus on in the future.
+      <br>
+      <form [formGroup]="formL" *ngIf="active" (ngSubmit)="onSubmitL()">
+        <label for="city">City</label>
+        <input type="text" id="city" class="form-control" formControlName="city" autocomplete="on" [readonly]="!doMe">
+        <div *ngIf="formErrorsL.city" class="alert alert-danger">
+          {{ formErrorsL.city }}
+        </div>
+        <br>
+        <label for="state">State/Province/Canton</label>
+        <input type="text" id="state" class="form-control" formControlName="state" autocomplete="on" [readonly]="!doMe">
+        <div *ngIf="formErrorsL.state" class="alert alert-danger">
+          {{ formErrorsL.state }}
+        </div>
+        <br>
+        <label for="country">Country</label>
+        <input type="text" id="country" class="form-control" formControlName="country" autocomplete="on" [readonly]="!doMe">
+        <div *ngIf="formErrorsL.country" class="alert alert-danger">
+          {{ formErrorsL.country }}
+        </div>
+        <br>
+        <div *ngIf="doMe">
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+      </form>
+    </tab>
+    <tab tabTitle="Votes" [active]="globalService.activeTab === 'Votes'">
+      <div *ngIf="!votes">(No votes)</div>
+      <div *ngFor="let v of votes">
+        {{v.vote}} {{getTitle(v.proposal)}}
+      </div>
+    </tab>
+    <tab tabTitle="Posts" (click)="loadPosts()">
+      <div *ngIf="!posts">(No posts)</div>
+      <div *ngFor="let p of posts">
+        <b>{{getTitle(p.proposal)}}</b>
+        <br> {{p.text}}
+      </div>
+    </tab>
+    <tab *ngIf="doMe" tabTitle="Excludes">
+      <nav>
+        <div *ngFor="let e of globalService.myProfile.exclude">
+          <a [routerLink]="['/profile/', e]">Go to {{e}}</a>
+          <a (click)="include(e)">Resume matching to {{e}}</a>
+        </div>
+      </nav>
+    </tab>
+    <tab *ngIf="doMe" tabTitle="Contact">
+      <br>
+      <alert></alert>
+      You'll get one or two emails/SMS messages a week, one on Sunday at midnight (UTC) with the results
+      <br> of each vote and the announcement of the next week's proposal. If you don't cast a direct vote
+      <br> you'll also get a message on Friday at midnight telling you what your proxy vote will be.
+      <br> Note that SMS support is not implemented yet.
+      <form [formGroup]="formC" *ngIf="active" (ngSubmit)="onSubmitC()">
+        <label for="oldpw">Password</label>
+        <input id="oldpw" class="form-control" formControlName="oldpw" type="{{ showPassword ? 'text' : 'password' }}">
+        <label>Show Password:
+          <input type="checkbox" checked="false" (change)="showPassword = !showPassword">
+        </label>
+        <div *ngIf="formErrorsC.oldpw" class="alert alert-danger">
+          {{ formErrorsC.oldpw }}
+        </div>
+        <br>
+        <br>
+        <label for="email">Email address</label>
+        <input id="email" class="form-control" formControlName="email">
+        <div *ngIf="formErrorsC.email" class="alert alert-danger">
+          {{ formErrorsC.email }}
+        </div>
+        <br>
+        <label for="phone">Phone number</label>
+        <input id="phone" class="form-control" formControlName="phone">
+        <br>
+        <label for="contact">Preferred contact method:</label>
+        <input type="radio" name="contact" value="e" (change)="globalService.myProfile.contact = 'e'" [checked]="globalService.myProfile.contact === 'e'">
+        Email
+        <input type="radio" name="contact" value="p" (change)="globalService.myProfile.contact = 'p'" [checked]="globalService.myProfile.contact === 'p'"
+          disabled> Phone
+        <input type="radio" name="contact" value="N" (change)="globalService.myProfile.contact = 'n'" [checked]="globalService.myProfile.contact === 'N'">
+        None
+        <br>
+        <button type="submit" class="btn btn-primary" [disabled]="!formC.valid">Submit</button>
+      </form>
+    </tab>
+    <tab *ngIf="doMe" tabTitle="Password">
+      <br>
+      <alert></alert>
+      <form [formGroup]="formP" *ngIf="active" (ngSubmit)="onSubmitP()">
+        <label for="oldpw">Old Password</label>
+        <input id="oldpw" class="form-control" formControlName="oldpw" type="{{ showPassword ? 'text' : 'password' }}">
+        <div *ngIf="formErrorsP.oldpw" class="alert alert-danger">
+          {{ formErrorsP.newpw }}
+        </div>
+        <label for="newpw">New Password</label>
+        <input id="newpw" class="form-control" formControlName="newpw" type="{{ showPassword ? 'text' : 'password' }}">
+        <div *ngIf="formErrorsP.newpw" class="alert alert-danger">
+          {{ formErrorsP.newpw }}
+        </div>
+        <label>Show Passwords:
+          <input type="checkbox" checked="false" (change)="showPassword = !showPassword">
+        </label>
+        <br>
+        <button type="submit" class="btn btn-primary" [disabled]="!formP.valid">Submit</button>
+      </form>
+    </tab>
+  </tabs>
+</div>

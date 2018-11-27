@@ -1,0 +1,25 @@
+<div class="container">
+    <h1>Log in</h1>
+    <alert></alert>
+    <form [formGroup]="liForm" *ngIf="active" (ngSubmit)="onSubmit()">
+        <div class="form-group">
+            <label for="screen_name">Screen Name</label>
+
+            <input type="text" id="screen_name" class="form-control" formControlName="screen_name">
+
+            <div *ngIf="formErrors.screen_name" class="alert alert-danger">
+                {{ formErrors.screen_name }}
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input id="password" class="form-control" formControlName="password" type="{{ showPassword ? 'text' : 'password' }}">
+            <label>Show Password: <input type="checkbox" checked="false" (change)="showPassword = !showPassword"></label>
+            <div *ngIf="formErrors.password" class="alert alert-danger">
+                {{ formErrors.password }}
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary" [disabled]="!liForm.valid">Submit</button>
+        <button type="button" class="btn btn-primary f_right" routerLink="/register">Register</button>
+    </form>
+</div>

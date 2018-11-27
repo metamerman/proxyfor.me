@@ -1,0 +1,23 @@
+body {
+  margin-right: 20px;
+}
+.current {
+  background-color: #ccc;
+}
+table {
+  border-collapse: collapse;
+  table-layout:auto;
+}
+.table>thead>tr>th {
+  padding-left: 1em;
+}
+.table>tbody>tr>td {
+  padding-left: 1em;
+  vertical-align: middle;
+}
+.yes {
+  color: #690;;
+}
+.no {
+  color: #DD4A68
+}

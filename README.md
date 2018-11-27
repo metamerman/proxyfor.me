@@ -1,27 +1,33 @@
-# AngularTourOfHeroes
+# proxyfor.me
+Democracy by Matched Proxy client and server
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 7.0.6.
+# Purpose
+This open-source archive is being made available primarily so that correct operation can be verified by any interested party and so that it can be reviewed for security flaws. Contributions to improve aethetics, feature set, and/or performance are of course welcome but if you have to choose, please invest the time in code review rather than enhancement.
 
-## Development server
+# Overview
+Live example can be viewed at https://www.proxyfor.me/ Release notes can be found in Help system (help.component.html).
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+The server component (main directory) consists of a NodeJS + Express process connecting to standard-config MongoDB process running in an AWS (Amazon Linux) EC2 instance. AWS SES (Simple Email Service) is used via the AWS API for sending email and text messages. The client (ui directory) is an Angular Single Page Application (SPA). Both are written in TypeScript which is transpiled to JavaScript (es5). The two components exchange data using classes defined in classes.ts to make transfer of data between client and server more straightforward.
 
-## Code scaffolding
+# Setup
+First install NodeJS (https://nodejs.org/en/), MongoDB (https://www.mongodb.com/download-center#community), TypeScript (npm install -g typescript), Angular CLI (npm install -g @angular/cli), and your development environment (for developing on Windows we recommend https://code.visualstudio.com/download).
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+The Node libraries required are all specified in package.json, so "npm install" should get them all for you. Then run "tsc" in the main (server) directory and "ng build" in the app directory (ba.bat and bs.bat will do this for you on Windows) to transpile the .ts files to .js.
 
-## Build
+To run the app, create an empty directory for MongoDB (C:\data\db on Windows), start up a mongodb process in a shell (magic incantations for Windows can be found at the top of server.ts), then create another shell and run "node server.js" to start up the proxyfor.me server. Default port is standard HTTP (port 80) which is open on Windows but requires root permission to run on other OSs (you can change the port in server.ts). Then connect to "localhost" from the browser.
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+# Testing with bots (simulated data)
+When run with an empty database the template proposals in "proposals.json" will be loaded, 100 direct voting bots and 100 proxy bots will be created, and the system will create votes and posts for them. You can use this dummy data to test out the UI and the server's proxy matching routines. To check or work on the email routines you'll need to sign up for AWS (it runs fine in the free tier, but you will need to contact AWS support and ask them to let you out of the sandbox) and also change the bot-generating routines and aws-ses-config.json.
 
-## Running unit tests
+Real raw data (via mongodump and mongorestore, albeit with profile contact information redacted) will be made available upon request to gm@proxyfor.me for more advanced testing or data analysis.
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+# To-do list
+Need to make registration and voting more bot-resistant (captcha, email validation, ip-filtering, etc.)
 
-## Running end-to-end tests
+Bundle the client into apps that can be distributed in the Apple and Google app stores and then extend those apps to take advantage of native features (e.g., via PhoneGap).
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+Expand admin features and ui (monitoring, add/edit/delete profiles, etc.)
 
-## Further help
+Create a budgeting system so that the same mechanism used for proposal matching can be applied to tweaking and approving a budget.
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+Eventually the system will need to be extended to support acquisition and maintenance of Credentials and for maintaining tax and health-care records.

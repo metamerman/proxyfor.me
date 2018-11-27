@@ -1,0 +1,220 @@
+<h4>{{globalService.proposal?.id}}v{{globalService.proposal?.version}}&nbsp;{{globalService.proposal?.title}}</h4>
+<nav>
+  <div *ngIf="globalService.myProfile.screen_name === 'gm' || globalService.myProfile.screen_name === globalService.proposal.proposer">
+    <a [routerLink]="['/edit/q_a/', globalService.proposal.id + 'v' + globalService.proposal.version]">Edit Q &amp; A for This Proposal</a>
+    <div *ngIf="globalService.proposal.order < 100 ">
+      <a [routerLink]="['/edit/proposal/', globalService.proposal.id + 'v' + globalService.proposal.version]">Edit This Proposal</a>
+    </div>
+  </div>
+</nav>
+<tabs>
+  <tab tabTitle="Wizard" [active]="globalService.activeTab === 'Wizard'">
+    <div id="pros">
+      <p></p>
+      <p> If you're new to this, you can read about what this app does and how it works by clicking on the &quot;Help&quot; button
+        above.
+      </p>
+      <p> This wizard will guide you through the process of evaluating a proposal and then voting on it. If you know exactly
+        what you're looking for, you can use the tabs above to jump to a particular section. Remember the voting rule is
+        &quot;Quality over Quantity&quot;: If you don't have the time or inclination to research a proposal, we'll all probably
+        be better off if you defer to your proxies who presumably did (or will).</p>
+      <p>After you've reviewed each page, click the &quot;Next&quot; button to go on to the next one.</p>
+      <nav><a ngClass="next" (click)="globalService.activeTab = 'Abstract'">Next &gt;</a></nav>
+    </div>
+  </tab>
+  <tab tabTitle="Abstract" [active]="globalService.activeTab === 'Abstract'">
+    <div id="pros">
+      <div *ngIf="showvotes">
+        <div><label>Yes votes:&nbsp;</label>{{globalService.proposal?.yes_votes}}</div>
+        <div><label>No votes:&nbsp;</label>{{globalService.proposal?.no_votes}}</div>
+      </div>
+      <div *ngIf="globalService.proposal?.close_date">
+        <div><label>Vote closing date:&nbsp;</label>{{globalService.proposal?.vote_date}}</div>
+        <div><label>Yes votes at closing:&nbsp;</label>{{globalService.proposal?.close_yes_votes}}</div>
+        <div><label>No votes at closing:&nbsp;</label>{{globalService.proposal?.close_no_votes}}</div>
+      </div>
+      <div><label>Abstract:&nbsp;</label><span [innerHTML]="abstract"></span></div>
+      <div><label>Cost:&nbsp;</label> {{globalService.proposal?.cost}}</div>
+      <div><label>Effective Date:&nbsp;</label> {{globalService.proposal?.effective_date}}</div>
+      <div><label>Version History:&nbsp;</label> {{globalService.proposal?.history}}</div>
+      <nav><a ngClass="next" (click)="globalService.activeTab = 'Justification'">Next &gt;</a></nav>
+    </div>
+  </tab>
+  <tab tabTitle="Justification" [active]="globalService.activeTab === 'Justification'">
+    <div id="pros">
+      <p></p>
+      <div [innerHTML]="justification"></div>
+      <nav><a ngClass="next" (click)="globalService.activeTab = globalService.proposal.full_text.length > 1 ? 'Full Text' : 'Q & A'">Next &gt;</a></nav>
+    </div>
+  </tab>
+  <tab *ngIf="globalService.proposal?.full_text?.length > 1" tabTitle="Full Text" [active]="globalService.activeTab === 'Full Text'">
+    <p></p>
+    <div [innerHTML]="full_text"></div>
+    <nav><a ngClass="next" (click)="globalService.activeTab = 'Q & A'">Next &gt;</a></nav>
+  </tab>
+  <tab tabTitle="Q & A" [active]="globalService.activeTab === 'Q & A'">
+    <div id="pros">
+      <p></p>
+      <div [innerHTML]="q_a"></div>
+    </div>
+    <div style="clear:both" class="container">
+      <br>
+      <alert></alert>
+      <form [formGroup]="formQ" *ngIf="active" (ngSubmit)="onSubmitQ()">
+        <label for="text">Communicate with the proposer with this form: If you ask a question, your response will appear above after they respond.<br>
+          Comments/suggestions/complaints/etc. may result in the proposal being updated in which case you'll see the feedback in the version history.<br>
+          Note that your email address will be provided to the proposer who may follow up with you directly.</label>
+        <textarea rows="3" id="text" class="form-control" formControlName="text"></textarea>
+        <div *ngIf="formErrorsQ.text" class="alert alert-danger">
+          {{ formErrorsQ.text }}
+        </div>
+        <br>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
+    </div>
+    <nav><a ngClass="next" (click)="globalService.activeTab = 'Pro/Con'">Next &gt;</a></nav>
+  </tab>
+  <tab tabTitle="Pro/Con" [active]="globalService.activeTab === 'Pro/Con'">
+    <br>
+    <div>
+      <label for="sort">Sort by:</label>
+      <select name="sortBy" [(ngModel)]="sortBy" (ngModelChange)="reSort()">
+        <option value="dateNew">date - newest first</option>
+        <option value="dateOld">date - oldest first</option>
+        <option value="citeMost">cites - most first</option>
+        <option value="citeLeast">cites - least first</option>
+        <option value="sn">screen name</option>
+      </select>
+    </div>
+    <alert></alert>
+    <div id="pros">
+      <h3>Pros</h3>
+      <div class="header-bar"></div>
+      <div class="post" *ngFor="let p of pros">
+        <div class="subject">{{p.subject}}
+          <span class="cites">Cites: {{p.ncites}}</span>
+        </div>
+        <div class="posttext">
+          <span [innerHTML]="p.text"></span>
+        </div>
+        <span class="by">By {{p.screen_name}}</span>
+        <span class="flag"><a (click)="flag(p)">Flag as off-topic</a></span><br>
+      </div>
+    </div>
+    <div id="cons">
+      <h3>Cons</h3>
+      <div class="header-bar"></div>
+      <div class="post" *ngFor="let p of cons">
+        <div class="subject">{{p.subject}}
+          <span class="cites">Cites: {{p.ncites}}</span>
+        </div>
+        <div class="posttext">
+          <span [innerHTML]="p.text"></span>
+        </div>
+        <span class="by">By {{p.screen_name}}</span>
+        <span class="flag"><a (click)="flag(p)">Flag as off-topic</a></span><br>
+      </div>
+    </div>
+    <nav><a ngClass="next" (click)="globalService.activeTab = 'Vote'">Next &gt;</a></nav>
+  </tab>
+  <tab tabTitle="Vote" [active]="globalService.activeTab === 'Vote'">
+    <div *ngIf="!globalService.myProfile.screen_name">
+      <a routerLink="/login">Log in to vote</a>
+    </div>
+    <div *ngIf="globalService.myProfile.screen_name">
+      <div *ngIf="matches?.length === 0">
+        <a routerLink="/profile">Fill out profile to vote</a>
+      </div>
+      <div *ngIf="matches?.length > 0">
+        <div *ngIf="globalService.myProfile.big5.indexOf('0') != -1">
+          <label>Your proxies (Mini Match):</label>
+        </div>
+        <div *ngIf="globalService.myProfile.big5.indexOf('0') == -1">
+          <label>Your proxies:</label>
+        </div>
+        <nav>
+          <span *ngFor="let match of matches">
+            <span *ngIf="match.screen_name">
+              <a [routerLink]="['/profile/', match.screen_name]">{{match.screen_name}}({{match.diff}}) {{match.vote == "Y" ? "Yes" : "No"}}</a>
+            </span>
+          </span>
+        </nav>
+        <br>
+        <label>Your calculated vote:</label> {{cvote == "Y" ? "Yes" : "No"}}
+        <nav>
+          <label>Your direct vote:</label>
+          <div *ngIf="!directvote || globalService.proposal.version === directversion">
+            <a [ngClass]="directvote === 'Y' ? 'voted' : 'notvoted'" (click)="vote('Y'); globalService.activeTab = 'Cite/Post'">Yes &gt;</a>
+            <a [ngClass]="directvote === 'N' ? 'voted' : 'notvoted'" (click)="vote('N'); globalService.activeTab = 'Cite/Post'">No &gt;</a>
+            <a [ngClass]="directvote === 'A' ? 'voted' : 'notvoted'" (click)="vote('A')">Abstain</a>
+          </div>
+          <div *ngIf="directvote && globalService.proposal.version !== directversion">
+            <a (click)="vote('Y'); globalService.activeTab = 'Cite/Post'">Yes {{directvote === "Y" ? "*" : ""}} &gt;</a>
+            <a (click)="vote('N'); globalService.activeTab = 'Cite/Post'">No {{directvote === "N" ? "*" : ""}} &gt;</a>
+            <a (click)="vote('A')">Abstain {{directvote === "A" ? "*" : ""}}</a>
+            <p>* Note that you voted/posted/cited on version {{directversion}}.<br> Please check the proposal version history
+              and resubmit your<br> votes/posts/cites to verify that they're still correct.</p>
+          </div>
+        </nav>
+      </div>
+    </div>
+  </tab>
+  <tab tabTitle="Cite/Post" [active]="globalService.activeTab === 'Cite/Post'">
+    <div *ngIf="!directvote">
+      You have to vote before you can Cite or Post.
+    </div>
+    <div *ngIf="directvote">
+      <br>
+      <alert></alert>
+      <p>Now that you've voted please take a moment to help others decide. First, cite any posts that you found particularly<br>        persuasive by clicking on the link at the bottom of each. If none of them completely capture your reasoning, please<br>        create a new post to explain that, including links to any outside sources you relied on.<br> Note that your post
+        can contain <a target="_blank" href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet">Markdown</a>.
+        <div>
+          <label for="sort">Sort by:</label>
+          <select name="sortBy" [(ngModel)]="sortBy" (ngModelChange)="reSort()">
+            <option value="dateNew">date - newest first</option>
+            <option value="dateOld">date - oldest first</option>
+            <option value="citeMost">cites - most first</option>
+            <option value="citeLeast">cites - least first</option>
+            <option value="sn">screen name</option>
+          </select>
+        </div>
+        <div id="pros">
+          <div class="header-bar"></div>
+          <div [class]="globalService.myCites[p._id] ? 'citedpost' : 'post'" *ngFor="let p of (directvote === 'Y' ? pros : cons)">
+            <div [class]="globalService.myCites[p._id] ? 'citedsubject' : 'subject'">{{p.subject}}
+              <span class="cites">Cites: {{p.ncites}}</span>
+            </div>
+            <div class="posttext">
+              <span [innerHTML]="p.text"></span>
+            </div>
+            <span class="by">By {{p.screen_name}}</span>
+            <span *ngIf="globalService.myCites[p._id]" class="cite"><a (click)="uncite(p)">Uncite this post</a></span>
+            <span *ngIf="!globalService.myCites[p._id] && p.screen_name !== globalService.myProfile.screen_name" class="cite"><a (click)="cite(p)">Cite this post</a></span>
+            <span class="flag"><a (click)="flag(p)">Flag as off-topic</a></span><br>
+          </div>
+        </div>
+        <div id="cons">
+          <div class="header-bar"></div>
+          <h3>New Post:</h3>
+          <form [formGroup]="formP" *ngIf="active" (ngSubmit)="onSubmitP()">
+            <label for="subject">Subject</label>
+            <input type="text" id="subject" class="form-control" formControlName="subject">
+            <div *ngIf="formErrorsP.subject" class="alert alert-danger">
+              {{ formErrorsP.subject }}
+            </div><br>
+            <label for="Text">Text</label>
+            <textarea rows="8" id="text" class="form-control" formControlName="text"></textarea>
+            <div *ngIf="formErrorsP.text" class="alert alert-danger">
+              {{ formErrorsP.text }}
+            </div>
+            <br>
+            <button type="submit" class="btn btn-primary">Submit</button>
+          </form>
+          <div *ngIf="globalService.proposal.version !== directversion">
+            <p>Note that you voted/posted/cited on version {{directversion}}.<br> Please check the proposal version history
+              and your<br> votes/posts/cites to verify that they're still correct.</p>
+          </div>
+        </div>
+    </div>
+  </tab>
+</tabs>

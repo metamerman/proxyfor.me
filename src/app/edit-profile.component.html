@@ -1,0 +1,22 @@
+<div class="container">
+    <h1>Edit Profile</h1>
+    <alert></alert>
+    <form [formGroup]="pForm" *ngIf="active" (ngSubmit)="onSubmit()">
+        <div class="form-group">
+            <label for="screen_name">Screen Name</label>
+            <input type="text" id="screen_name" class="form-control" formControlName="screen_name">
+            <div *ngIf="formErrors.screen_name" class="alert alert-danger">
+                {{ formErrors.screen_name }}
+            </div>
+        </div>
+        <label for="status">No Post <input type="checkbox" (change)="nopost = !nopost" [checked]="nopost"></label>
+        <div class="form-group">
+            <label for="password">New Password</label>
+            <input type="text" id="password" class="form-control" formControlName="password">
+        </div>
+        <button type="submit" class="btn btn-primary" [disabled]="!pForm.valid">Submit</button>
+        <button type="button" class="btn btn-primary" (click)="login()">Log in as user</button>
+        <button type="button" class="btn btn-primary" (click)="delete()">Delete User...</button>
+        <button type="button" class="btn btn-primary f_right" (click)="cancel()">Cancel</button>
+    </form>
+</div>

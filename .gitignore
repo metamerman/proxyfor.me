@@ -4,6 +4,10 @@
 /dist
 /tmp
 /out-tsc
+*.map
+*.js
+*.gz
+aws-ses-config.json
 
 # dependencies
 /node_modules
