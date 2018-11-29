@@ -20,8 +20,8 @@ import * as db from "./db";
 import { dirname } from "path";
 
 var options = {
-    key: fs.readFileSync('privateKey.key'),
-    cert: fs.readFileSync('certificate.crt')
+    key: fs.readFileSync(__dirname +'/privatekey.key'),
+    cert: fs.readFileSync(__dirname + '/certificate.crt')
 };
 
 function getjwt(req: express.Request): string {
