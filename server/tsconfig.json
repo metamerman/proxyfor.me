@@ -1,7 +1,6 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "outDir": "..",
     "sourceMap": true,
     "declaration": false,
     "module": "commonjs",
@@ -20,6 +19,7 @@
   "files": [
     "db.ts",
     "email.ts",
-    "server.ts"
+    "server.ts",
+    "classes.ts"
   ]
 }

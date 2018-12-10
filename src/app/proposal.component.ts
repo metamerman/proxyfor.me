@@ -33,7 +33,7 @@ export class amProposalComponent implements OnInit {
   cvote: string;
   formQ: FormGroup;
   formP: FormGroup;
-  
+
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
@@ -56,7 +56,7 @@ export class amProposalComponent implements OnInit {
   ngOnInit(): void {
     this.buildFormQ();
     this.buildFormP();
-    
+
     this.route.params
       .pipe(switchMap((params: Params) => this.proposalService.getProposal('proposal/' + params['id'])))
       .subscribe(proposal => {
@@ -165,8 +165,9 @@ export class amProposalComponent implements OnInit {
     if (this.directvote !== v || this.directversion !== this.globalService.proposal.version) {
       this.directvote = v;
       this.directversion = this.globalService.proposal.version;
+      let ps = this.proposalService;
       let vote: amVote = new amVote(this.globalService.proposal, this.globalService.myProfile, v);
-      this.proposalService.vote(vote).catch(e => this.handleError(e));
+      ps.vote(vote).catch(e => this.handleError(e));
       this.globalService.myVotes.push(vote);
     }
   }

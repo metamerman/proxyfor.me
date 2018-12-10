@@ -1,1 +1,1 @@
-cd server && tsc && cd ..
+cp src/app/classes.ts server && cd server && tsc && mv *.js .. && cd ..

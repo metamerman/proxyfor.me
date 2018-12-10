@@ -8,6 +8,7 @@
 *.js
 *.gz
 aws-ses-config.json
+/server/classes.ts
 
 # dependencies
 /node_modules
@@ -41,3 +42,4 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
+server/classes.ts

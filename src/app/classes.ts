@@ -63,13 +63,13 @@ export class amProposalHead {
 
 export const profileGetSpec = {
     fields: {
-        _id: 0, screen_name: 1, city: 1, state: 1, country: 1, exclude: 1,
-        big5: 1, will: 1, contact: 1, email: 1, phone: 1
+        _id: 0, screen_name: 1, city: 1, state: 1, cc: 1, auth: 1,
+        exclude: 1, big5: 1, will: 1, contact: 1, email: 1, phone: 1
     }
 }
 
 export const profileSetSpec = {
-    city: 1, state: 1, country: 1, exclude: 1,
+    city: 1, state: 1, cc: 1, auth: 1, exclude: 1,
     big5: 1, will: 1, contact: 1, email: 1, phone: 1
 }
 
@@ -82,7 +82,11 @@ export class amProfile {
     phone: string;          // for SMS
     city: string;
     state: string;
-    country: string;
+    cc: string;
+    auth: boolean;
+    vid: number;
+    housenum: number;
+    fp: number;
     exclude: string[];      // array of profile ids to exclude from matches
     big5: string;   // when profiles are changed, append old profile to log file
     will: string;
@@ -140,7 +144,6 @@ export class amVote {
     email: string;
     phone: string;          // for SMS
     oid: string;            // for unsubscribe message
-    ip: string;
     constructor(proposal: amProposal, profile: amProfile, v: string) {
         this.proposal = proposal.id;
         this.version = proposal.version;
@@ -170,4 +173,13 @@ export class amCite {
     _id: string;
     post: string;           // id of post
     screen_name: string;
+}
+
+export class amRegisteredVoter {
+    _id: string;
+    vid: string;
+    state: string;
+    cc: string;
+    housenum: string;
+    city: string;
 }

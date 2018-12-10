@@ -1,9 +1,11 @@
 <h4>{{globalService.proposal?.id}}v{{globalService.proposal?.version}}&nbsp;{{globalService.proposal?.title}}</h4>
 <nav>
   <div *ngIf="globalService.myProfile.screen_name === 'gm' || globalService.myProfile.screen_name === globalService.proposal.proposer">
-    <a [routerLink]="['/edit/q_a/', globalService.proposal.id + 'v' + globalService.proposal.version]">Edit Q &amp; A for This Proposal</a>
+    <a [routerLink]="['/edit/q_a/', globalService.proposal.id + 'v' + globalService.proposal.version]">Edit Q &amp; A
+      for This Proposal</a>
     <div *ngIf="globalService.proposal.order < 100 ">
-      <a [routerLink]="['/edit/proposal/', globalService.proposal.id + 'v' + globalService.proposal.version]">Edit This Proposal</a>
+      <a [routerLink]="['/edit/proposal/', globalService.proposal.id + 'v' + globalService.proposal.version]">Edit This
+        Proposal</a>
     </div>
   </div>
 </nav>
@@ -11,12 +13,19 @@
   <tab tabTitle="Wizard" [active]="globalService.activeTab === 'Wizard'">
     <div id="pros">
       <p></p>
-      <p> If you're new to this, you can read about what this app does and how it works by clicking on the &quot;Help&quot; button
+      <p class="alert">Demo Mode: No new accounts or changes will be permanently saved. Please log in as user "bot10"
+        password "bot10" to test matching/voting/posting.</p>
+        <p></p>
+        <p> If you're new to this, you can read about what this app does and how it works by clicking on the
+        &quot;Help&quot; button
         above.
       </p>
-      <p> This wizard will guide you through the process of evaluating a proposal and then voting on it. If you know exactly
-        what you're looking for, you can use the tabs above to jump to a particular section. Remember the voting rule is
-        &quot;Quality over Quantity&quot;: If you don't have the time or inclination to research a proposal, we'll all probably
+      <p> This wizard will guide you through the process of evaluating a proposal and then voting on it. If you know
+        exactly
+        what you're looking for, you can use the tabs above to jump to a particular section. Remember the voting rule
+        is
+        &quot;Quality over Quantity&quot;: If you don't have the time or inclination to research a proposal, we'll all
+        probably
         be better off if you defer to your proxies who presumably did (or will).</p>
       <p>After you've reviewed each page, click the &quot;Next&quot; button to go on to the next one.</p>
       <nav><a ngClass="next" (click)="globalService.activeTab = 'Abstract'">Next &gt;</a></nav>
@@ -44,7 +53,8 @@
     <div id="pros">
       <p></p>
       <div [innerHTML]="justification"></div>
-      <nav><a ngClass="next" (click)="globalService.activeTab = globalService.proposal.full_text.length > 1 ? 'Full Text' : 'Q & A'">Next &gt;</a></nav>
+      <nav><a ngClass="next" (click)="globalService.activeTab = globalService.proposal.full_text.length > 1 ? 'Full Text' : 'Q & A'">Next
+          &gt;</a></nav>
     </div>
   </tab>
   <tab *ngIf="globalService.proposal?.full_text?.length > 1" tabTitle="Full Text" [active]="globalService.activeTab === 'Full Text'">
@@ -61,8 +71,10 @@
       <br>
       <alert></alert>
       <form [formGroup]="formQ" *ngIf="active" (ngSubmit)="onSubmitQ()">
-        <label for="text">Communicate with the proposer with this form: If you ask a question, your response will appear above after they respond.<br>
-          Comments/suggestions/complaints/etc. may result in the proposal being updated in which case you'll see the feedback in the version history.<br>
+        <label for="text">Communicate with the proposer with this form: If you ask a question, your response will
+          appear above after they respond.<br>
+          Comments/suggestions/complaints/etc. may result in the proposal being updated in which case you'll see the
+          feedback in the version history.<br>
           Note that your email address will be provided to the proposer who may follow up with you directly.</label>
         <textarea rows="3" id="text" class="form-control" formControlName="text"></textarea>
         <div *ngIf="formErrorsQ.text" class="alert alert-danger">
@@ -135,7 +147,8 @@
         <nav>
           <span *ngFor="let match of matches">
             <span *ngIf="match.screen_name">
-              <a [routerLink]="['/profile/', match.screen_name]">{{match.screen_name}}({{match.diff}}) {{match.vote == "Y" ? "Yes" : "No"}}</a>
+              <a [routerLink]="['/profile/', match.screen_name]">{{match.screen_name}}({{match.diff}}) {{match.vote ==
+                "Y" ? "Yes" : "No"}}</a>
             </span>
           </span>
         </nav>
@@ -144,15 +157,18 @@
         <nav>
           <label>Your direct vote:</label>
           <div *ngIf="!directvote || globalService.proposal.version === directversion">
-            <a [ngClass]="directvote === 'Y' ? 'voted' : 'notvoted'" (click)="vote('Y'); globalService.activeTab = 'Cite/Post'">Yes &gt;</a>
-            <a [ngClass]="directvote === 'N' ? 'voted' : 'notvoted'" (click)="vote('N'); globalService.activeTab = 'Cite/Post'">No &gt;</a>
+            <a [ngClass]="directvote === 'Y' ? 'voted' : 'notvoted'" (click)="vote('Y'); globalService.activeTab = 'Cite/Post'">Yes
+              &gt;</a>
+            <a [ngClass]="directvote === 'N' ? 'voted' : 'notvoted'" (click)="vote('N'); globalService.activeTab = 'Cite/Post'">No
+              &gt;</a>
             <a [ngClass]="directvote === 'A' ? 'voted' : 'notvoted'" (click)="vote('A')">Abstain</a>
           </div>
           <div *ngIf="directvote && globalService.proposal.version !== directversion">
             <a (click)="vote('Y'); globalService.activeTab = 'Cite/Post'">Yes {{directvote === "Y" ? "*" : ""}} &gt;</a>
             <a (click)="vote('N'); globalService.activeTab = 'Cite/Post'">No {{directvote === "N" ? "*" : ""}} &gt;</a>
             <a (click)="vote('A')">Abstain {{directvote === "A" ? "*" : ""}}</a>
-            <p>* Note that you voted/posted/cited on version {{directversion}}.<br> Please check the proposal version history
+            <p>* Note that you voted/posted/cited on version {{directversion}}.<br> Please check the proposal version
+              history
               and resubmit your<br> votes/posts/cites to verify that they're still correct.</p>
           </div>
         </nav>
@@ -166,7 +182,10 @@
     <div *ngIf="directvote">
       <br>
       <alert></alert>
-      <p>Now that you've voted please take a moment to help others decide. First, cite any posts that you found particularly<br>        persuasive by clicking on the link at the bottom of each. If none of them completely capture your reasoning, please<br>        create a new post to explain that, including links to any outside sources you relied on.<br> Note that your post
+      <p>Now that you've voted please take a moment to help others decide. First, cite any posts that you found
+        particularly<br> persuasive by clicking on the link at the bottom of each. If none of them completely capture
+        your reasoning, please<br> create a new post to explain that, including links to any outside sources you relied
+        on.<br> Note that your post
         can contain <a target="_blank" href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet">Markdown</a>.
         <div>
           <label for="sort">Sort by:</label>
@@ -189,7 +208,8 @@
             </div>
             <span class="by">By {{p.screen_name}}</span>
             <span *ngIf="globalService.myCites[p._id]" class="cite"><a (click)="uncite(p)">Uncite this post</a></span>
-            <span *ngIf="!globalService.myCites[p._id] && p.screen_name !== globalService.myProfile.screen_name" class="cite"><a (click)="cite(p)">Cite this post</a></span>
+            <span *ngIf="!globalService.myCites[p._id] && p.screen_name !== globalService.myProfile.screen_name" class="cite"><a
+                (click)="cite(p)">Cite this post</a></span>
             <span class="flag"><a (click)="flag(p)">Flag as off-topic</a></span><br>
           </div>
         </div>
@@ -211,7 +231,8 @@
             <button type="submit" class="btn btn-primary">Submit</button>
           </form>
           <div *ngIf="globalService.proposal.version !== directversion">
-            <p>Note that you voted/posted/cited on version {{directversion}}.<br> Please check the proposal version history
+            <p>Note that you voted/posted/cited on version {{directversion}}.<br> Please check the proposal version
+              history
               and your<br> votes/posts/cites to verify that they're still correct.</p>
           </div>
         </div>

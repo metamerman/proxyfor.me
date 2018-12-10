@@ -2,6 +2,7 @@
   <ul>
     <li><span class="title">proxyfor.me (Beta 3)</span></li>
     <li><span [hidden]="!globalService.myProfile.screen_name"><a (click)="logout()">Log out</a></span></li>
+    <li><span class="yes" [hidden]="!globalService.myProfile.auth">Authenticated in Colorado</span></li>
     <span *ngIf="globalService.myProfile.screen_name === 'gm'">
       <a [routerLink]="['/edit/profile']">Edit Profile...</a>
     </span>

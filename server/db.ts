@@ -49,6 +49,10 @@ let botprofiles: amProfile[] = [];
 let emailer: amEmailer;
 let gmtoken: string;
 
+function capitalize(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
+}
+
 function gethash(salt: string, pw: string): string {
     if (!salt || !pw)
         return "";
@@ -417,7 +421,7 @@ function emailResults() {
         stream.on('data', (v: amVote) => {
             let oid = new ObjectID(v._id);
             fs.writeSync(fd, oid.getTimestamp().getTime() + tab + v.screen_name + tab + v.vote + tab
-                + v.big5 + tab + v.will + tab + v.ip + nl);
+                + v.big5 + tab + v.will + tab + nl);
             if (v.contact === "e") {
                 emailer.sendResult(v, "direct", pf, cachedheads[cindex], cachedheads[cindex + 1]);
                 stream.pause();
@@ -646,7 +650,7 @@ export function deleteSn(token: string, sn: string): Promise<string> {
 }
 
 
-export function setProfile(token: string, profile: amProfile): Promise<string> {
+export function setProfile(token: string, ip: string, profile: amProfile): Promise<string> {
     return new Promise((resolve, reject) => {
         db.collection("Profile").findOne({ screen_name: profile.screen_name })
             .then(p => {
@@ -658,9 +662,26 @@ export function setProfile(token: string, profile: amProfile): Promise<string> {
                     else {
                         for (let f in profileSetSpec)
                             p[f] = profile[f];
-                        db.collection("Profile").updateOne({ _id: p._id }, { $set: p })
-                            .then(r => resolve(null))
-                            .catch(e => reject(e));
+                        p.city = capitalize(profile.city);
+                        if (profile.vid || profile.housenum) {
+                            db.collection("RegisteredVoters").findOne({
+                                vid: profile.vid, state: profile.state, cc: profile.cc
+                            }).then(rv => {
+                                if (!rv)
+                                    reject("Authorization failed: Voter information doesn't match");
+                                else {
+                                    fs.appendFileSync('authentications.log', [Date.now(), profile.vid, profile.fp, ip, "\n"].join(" "));
+                                    p.auth = true;
+                                    db.collection("Profile").updateOne({ _id: p._id }, { $set: p })
+                                        .then(r => resolve(null))
+                                        .catch(e => reject(e));
+                                }
+                            })
+                        }
+                        else
+                            db.collection("Profile").updateOne({ _id: p._id }, { $set: p })
+                                .then(r => resolve(null))
+                                .catch(e => reject(e));
                     }
             })
             .catch(e => reject(e));
@@ -751,13 +772,12 @@ export function flag(t: string, p: amPost): Promise<string> {
     })
 }
 
-export function vote(t: string, ip: string, vote: amVote): Promise<string> {
+export function vote(t: string, vote: amVote): Promise<string> {
     return new Promise((resolve, reject) => {
         db.collection("Profile").findOne({ token: t })
             .then(voter => {
                 if (!voter)
                     return reject("Authorization failed: Must be logged in to vote");
-                vote.ip = ip;
                 vote.oid = voter._id; // copy over stuff for matches and results notification
                 vote.contact = voter.contact;
                 vote.email = voter.email;
@@ -784,7 +804,7 @@ export function vote(t: string, ip: string, vote: amVote): Promise<string> {
                 else
                     varray.push(vote);
                 db.collection("DirectVote").updateOne(
-                    { screen_name: vote.screen_name, proposal: vote.proposal },  { $set: vote }, { upsert: true, w: 1 })
+                    { screen_name: vote.screen_name, proposal: vote.proposal }, { $set: vote }, { upsert: true, w: 1 })
                     .then(r => {
                         // potential non-atomic operation here (two finds before update) and we can't use findOneAndUpdate to set "order" field.
                         // accurate vote count comes from vote documents, not the numbers in proposal, so we'll punt on this until we get mutexes.
@@ -841,7 +861,7 @@ export function post(t: string, p: amPost): Promise<string> {
                 }
                 else {
                     delete p._id;
-                    db.collection("Post").updateOne({ proposal: p.proposal, screen_name: p.screen_name },  { $set: p }, { upsert: true })
+                    db.collection("Post").updateOne({ proposal: p.proposal, screen_name: p.screen_name }, { $set: p }, { upsert: true })
                         .then(r => resolve(null))
                         .catch(e => reject(e));
                 }
@@ -859,7 +879,7 @@ export function cite(t: string, c: amCite, add: boolean): Promise<string> {
                 delete c._id;
                 let oid = new ObjectID(c.post);
                 if (add)
-                    db.collection("Cite").updateOne(c,  { $set: c }, { upsert: true })
+                    db.collection("Cite").updateOne(c, { $set: c }, { upsert: true })
                         .then((r) => {
                             db.collection("Post").findOneAndUpdate({ _id: oid }, { $inc: { ncites: 1 } })
                                 .then(() => resolve(null))
@@ -916,7 +936,7 @@ export function login(t: string, li: amLogin): Promise<string> {
                 else {
                     p.hash = newhash;  // create new profile
                     p.token = jwt.sign({ token: p.screen_name }, p.salt);
-                    db.collection("Profile").updateOne({ screen_name: p.screen_name },  { $set: p }, { upsert: true })
+                    db.collection("Profile").updateOne({ screen_name: p.screen_name }, { $set: p }, { upsert: true })
                         .then(r => resolve(p.token))
                         .catch(e => reject(e));
                 }

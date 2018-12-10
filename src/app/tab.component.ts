@@ -35,7 +35,7 @@ export class Tabs implements AfterContentInit {
     if (this.tabs.first) {
       let activeTabs = this.tabs.filter((tab) => tab.active);
       if (activeTabs.length === 0)
-        this.selectTab(this.tabs.first);
+        setTimeout(() => this.selectTab(this.tabs.first)); // defer to prevent "changed after checked" error
     }
   }
 

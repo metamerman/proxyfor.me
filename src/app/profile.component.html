@@ -129,41 +129,61 @@
     </tab>
     <tab tabTitle="Locality" [active]="globalService.activeTab === 'Locality'">
       <br>
-      <alert></alert>
-      We can now authenticate voters in Colorado, so if you are registered to vote in that state please be sure to
-      complete the
-      "Voter ID" and "Date of Registration" fields. You can look up that information and copy and paste it into this
-      form
-      using the
-      <a href="https://www.sos.state.co.us/voter/pages/pub/olvr/findVoterReg.xhtml" target="_blank">Colorado
-        Secretary of State's web site.</a> Note that there should be no security concerns about doing this: No
-      personal
-      information is stored on this system (once the authentication is done, even the minimal information you enter
-      is not
-      stored in any way that it can be traced back to you). If you live in other places it would be useful to have
-      some general
-      information about where you live to gauge interest which will help us choose areas to focus on in the future.
-      <br>
+      <div *ngIf="doMe">
+        <p>We can now authenticate voters in Colorado, so if you are registered to vote in that state please be sure to
+          complete the
+          "Voter ID" and "Date of Registration" fields. You can look up that information and copy and paste it into
+          this
+          form
+          using the
+          <a href="https://www.sos.state.co.us/voter/pages/pub/olvr/findVoterReg.xhtml" target="_blank">Colorado
+            Secretary of State's web site.</a> Note that there should be no security concerns about doing this: No
+          personal
+          information is stored on this system (once the authentication is done, even the minimal information you enter
+          is not
+          stored in any way that it can be traced back to you, see the "Getting Started" guide in the help system for
+          details). If you live in other places it would be useful to have
+          some general
+          information about where you live to gauge interest which will help us choose areas to focus on in the future.</p>
+      </div>
       <form [formGroup]="formL" *ngIf="active" (ngSubmit)="onSubmitL()">
         <label for="city">City</label>
-        <input type="text" id="city" class="form-control" formControlName="city" autocomplete="on" [readonly]="!doMe">
+        <input type="text" id="city" class="form-control" formControlName="city" autocomplete="on" [readonly]="!doMe || preauth">
         <div *ngIf="formErrorsL.city" class="alert alert-danger">
           {{ formErrorsL.city }}
         </div>
         <br>
         <label for="state">State/Province/Canton</label>
-        <input type="text" id="state" class="form-control" formControlName="state" autocomplete="on" [readonly]="!doMe">
+        <input type="text" id="state" class="form-control" formControlName="state" autocomplete="on" [readonly]="!doMe || preauth">
         <div *ngIf="formErrorsL.state" class="alert alert-danger">
           {{ formErrorsL.state }}
         </div>
         <br>
-        <label for="country">Country</label>
-        <input type="text" id="country" class="form-control" formControlName="country" autocomplete="on" [readonly]="!doMe">
-        <div *ngIf="formErrorsL.country" class="alert alert-danger">
-          {{ formErrorsL.country }}
+        <label for="cc">Two-letter country code</label>
+        <input type="text" id="cc" class="form-control" formControlName="cc" autocomplete="on" [readonly]="!doMe || preauth">
+        <div *ngIf="formErrorsL.cc" class="alert alert-danger">
+          {{ formErrorsL.cc }}
         </div>
         <br>
+        <label>I am registered to vote in the State of Colorado:
+          <input type="checkbox" [checked]="registered" [disabled]="auth" (change)="registered = !registered">
+        </label>
         <div *ngIf="doMe">
+          <div *ngIf="registered && !auth">
+            <p>Please look up your registration and complete these 2 additional fields from the State's website to
+              authenticate (check the City field to make sure it's exactly the same too):</p>
+            <label for="vid">Voter ID</label>
+            <input type="text" id="vid" class="form-control" formControlName="vid">
+            <div *ngIf="formErrorsL.vid" class="alert alert-danger">
+              {{ formErrorsL.vid }}
+            </div><br>
+            <label for="housenum">House number</label>
+            <input type="text" id="housenum" class="form-control" formControlName="housenum">
+            <div *ngIf="formErrorsL.housenum" class="alert alert-danger">
+              {{ formErrorsL.housenum }}
+            </div><br>
+          </div>
+          <alert></alert>
           <button type="submit" class="btn btn-primary">Submit</button>
         </div>
       </form>
@@ -191,7 +211,6 @@
     </tab>
     <tab *ngIf="doMe" tabTitle="Contact">
       <br>
-      <alert></alert>
       You'll get one or two emails/SMS messages a week, one on Sunday at midnight (UTC) with the results
       <br> of each vote and the announcement of the next week's proposal. If you don't cast a direct vote
       <br> you'll also get a message on Friday at midnight telling you what your proxy vote will be.
@@ -224,12 +243,12 @@
         <input type="radio" name="contact" value="N" (change)="globalService.myProfile.contact = 'n'" [checked]="globalService.myProfile.contact === 'N'">
         None
         <br>
+        <alert></alert>
         <button type="submit" class="btn btn-primary" [disabled]="!formC.valid">Submit</button>
       </form>
     </tab>
     <tab *ngIf="doMe" tabTitle="Password">
       <br>
-      <alert></alert>
       <form [formGroup]="formP" *ngIf="active" (ngSubmit)="onSubmitP()">
         <label for="oldpw">Old Password</label>
         <input id="oldpw" class="form-control" formControlName="oldpw" type="{{ showPassword ? 'text' : 'password' }}">
@@ -245,6 +264,7 @@
           <input type="checkbox" checked="false" (change)="showPassword = !showPassword">
         </label>
         <br>
+        <alert></alert>
         <button type="submit" class="btn btn-primary" [disabled]="!formP.valid">Submit</button>
       </form>
     </tab>

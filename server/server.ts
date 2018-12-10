@@ -19,9 +19,10 @@ import { amLogin, amProposal, amProfile, amUpdateProfile, amVote, amPost, amCite
 import * as db from "./db";
 import { dirname } from "path";
 
+var keydir = process.platform === 'win32' ? __dirname : '/etc/letsencrypt/live/proxyfor.me/';
 var options = {
-    key: fs.readFileSync(__dirname +'/privatekey.key'),
-    cert: fs.readFileSync(__dirname + '/certificate.crt')
+    key: fs.readFileSync(keydir + '/privkey.pem'),
+    cert: fs.readFileSync(keydir + '/fullchain.pem')
 };
 
 function getjwt(req: express.Request): string {
@@ -50,8 +51,17 @@ db.init().catch(err => {
 });
 
 let app = express();
-let indexname = __dirname + '/dist/index.html';
 
+if (app.settings.env !== 'development') {
+    app.use((req, res, next) => {
+        if (req.secure)
+            next();
+        else
+            res.redirect('https://' + req.headers.host + req.url);
+    });
+}
+
+let indexname = __dirname + '/dist/index.html';
 app.enable('trust proxy');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -135,7 +145,7 @@ app.put('/profile', (req, res) => {
     if (token == null)
         res.sendFile(indexname);
     else
-        db.setProfile(token, req.body as amProfile).then(retval => res.send(retval)).catch(e => handle_error(res, e));
+        db.setProfile(token, req.ip, req.body as amProfile).then(retval => res.send(retval)).catch(e => handle_error(res, e));
 });
 
 app.put('/update', (req, res) => {
@@ -159,7 +169,7 @@ app.post('/flag', (req, res) => {
 });
 
 app.post('/vote', (req, res) => {
-    db.vote(getjwt(req), req.ip, req.body as amVote).then(retval => res.send(retval)).catch(e => handle_error(res, e));
+    db.vote(getjwt(req), req.body as amVote).then(retval => res.send(retval)).catch(e => handle_error(res, e));
 });
 
 app.post('/post', (req, res) => {

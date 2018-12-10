@@ -29,12 +29,13 @@
             &quot;expertise&quot; and enormous individual labor savings of the latter to handle more routine operation.
             It is crowd-sourced government, another form of Indirect Democracy, but is most accurately described as
             Democracy by Matched Proxy.</p>
-        <p>General Voting happens every weekend. The proxy batch calculation runs every Friday at midnight UTC (4pm US
-            Pacific time). After the proxy votes are calculated everyone who hasn't cast a direct vote will get an
-            email or text message telling them what vote has been calculated for them based on votes of the 5 proxies
-            who are most similar to them. They'll then have the weekend to look at how the proxy candidates voted and
-            why, and to override the calculated vote if they disagree with it. Voting closes Sunday at midnight UTC and
-            an email/text will sent to all direct and proxy voters with the final tally and announcement of the next
+        <p>When "auto-advance" is on (check the status line at the top of the screen), voting on the current proposal
+            will happen each weekend. The proxy batch calculation runs every Friday at midnight UTC (4pm US Pacific
+            time). After the proxy votes are calculated everyone who hasn't cast a direct vote will get an email or
+            text message telling them what vote has been calculated for them based on votes of the 5 proxies who are
+            most similar to them. They'll then have the weekend to look at how the proxy candidates voted and why, and
+            to override the calculated vote if they disagree with it. Voting closes Sunday at midnight UTC and an
+            email/text will sent to all direct and proxy voters with the final tally and announcement of the next
             weekend's proposal(s).</p>
         <p>If you have the time and inclination to do the research and consideration necessary to cast a direct vote
             and want to make yourself available as a proxy to other voters you'll have at least 10 days on each
@@ -52,18 +53,26 @@
             world currently works. Filling out the minimum set of these (the Mini Match) only takes about a minute, the
             Full Match about 10 minutes. Note that you can always come back and change your answers or fill out the
             full profile at a later date.</p>
-        <p>Next, please fill out the information in the Locality tab, especially if you live in the state of Colorado
-            (so that we can test the operation of the authentication system).</p>
+        <p>Next, please fill out the information in the Locality tab. If you live in the state of Colorado please
+            authenticate your account using the <a href="https://www.sos.state.co.us/voter/pages/pub/olvr/findVoterReg.xhtml"
+                target="_blank">
+                state's on-line voter registration system</a>, so that we can test the
+            operation of the authentication system. Note that only a limited subset of the registered voter database is
+            stored on this server (just the id, city, and street number for each voter): There is no chance that
+            hackers will get any usable quantity of your personal information from this site. Also note that no
+            information that links your screen name to any of this information is ever stored on the server, so there
+            is no chance that hackers (or even governments) will ever be able to match your personal information to
+            anything you do on this
+            site.</p>
         <p>Next, if you're so inclined, feel free to vote on any of the available proposals, keeping in mind that the
             proxyfor.me philosophy and design is &quot;quality over quantity&quot;: If you don't have the time or
             motivation to thoroughly investigate an issue (reading most or all of the posts and the background
             information they link to) we'll all be better off if you defer to your proxies, who presumably will have
-            that time and motivation. Residents of Denver have an extra incentive to do the research, though: The
-            proposals in this round all came from that jurisdiction and so are things that will affect you directly.
-            The votes and most-cited posts will also periodically be shared with the Denver city council, providing
-            active feedback in a more influential form than when people contact them as individuals. If (when!)
-            significant numbers people sign up for this system it can become the <em>dominant</em> source of
-            information council will use when making their decisions.</p>
+            that time and motivation. Residents of Boulder and Denver have an extra incentive to do the research,
+            though: Most of the proposals in this round of testing came from those jurisdictions and so are things that
+            will affect you directly. The votes and most-cited posts will be forwared to these city councils, providing
+            active feedback in a more influential form than when people contact them as individuals (see the FAQ for
+            more on this).</p>
         <p>If you'd like to debate the proposals, please feel free to do so on any social media site. Be sure to link
             back to proxyfor.me so that your friends and foes can vote too once they've made up their minds. If you
             don't currently use social media or want to use a site more oriented toward public policy decisions, please
@@ -78,13 +87,46 @@
                 you only have time to create an account and fill out the profile information, it's better to have you
                 than not: The mere existence of your profile will have a beneficial stabilizing effect on the operation
                 of the system, ensuring that the decisions it renders truly reflect The Will of The People. Note,
-                however, that the authentication system validates based on voter registration: Eventually being
-                registered to vote will matter in the finally tally. But this rule won't be imposed until we reach
-                critical mass (i.e., when 50% of registered voters have created an account). </p>
+                however, that the authentication system validates based on voter registration: Being registered to vote
+                in a particular jurisdiction will matter in the finally tally for proposals from that city. In this run
+                the city councils probably won't pay attention to votes cast by people who aren't registered voters,
+                although it may be of some interest, particularly if it differs from how registered voters vote. But
+                there are some proposals that are of more general nature, applicable to <em>all</em> public policy
+                decisionmakers.</p>
         </div>
-        <h5> <a (click)="show === 2 ? show = 0 : show = 2">Should I use my real name as my screen name when creating an
-                account?</a> </h5>
+        <h5> <a (click)="show === 2 ? show = 0 : show = 2">Why should I bother? Is what I do here binding on anyone?</a>
+        </h5>
         <div *ngIf="show === 2">
+            <p>The primary purpose of this round is obviously public beta testing to make sure the system in fact
+                works. But a summary of the votes and most influencial posts will be sent to the relevant city councils
+                and so could, and we believe eventually will, prove to be very influential in their decisionmaking. We
+                therefore believe that participating here is a better use of your time than sending emails to council,
+                attending their sessions (or even speaking at them), writing letters to the local papers, etc. because
+                representatives routinely ignore citizen input provide those ways for a variety of reasons: </p>
+            <ol>
+                <li>Bias: People that participate using these other methods invariably have an ax to grind. Their
+                    positions therefore differ from those of "The People" as a whole, making it reasonable to
+                    discount them.</li>
+                <li>No authentication: No checks are ever done to ensure that people providing feedback even <em>are</em>
+                    citizens of the jurisdiction.</li>
+                <li>Brigading: Recruitment, particularly recruitment using techniques like fear-mongering, result
+                    in much higher participation rates and biased opinions than what comes from people
+                    acting on their own.</li>
+                <li>No organization: Input comes from a variety of sources at a variety of times, making it very
+                    difficult for representatives to accurately discern "The Will Of The People".</li>
+                <li>Low signal to noise ratio: People use these forums to rant about things that aren't even under
+                    the represenative's control, or to make completely unreasonable suggestions or demands. They
+                    also frequently throw in a lot of extraneous information, sometimes to the point that it's not
+                    even clear what their vote on a particular proposal would be.</li>
+            </ol>
+            <p>The votes aggregated here and provided to them as a digest suffer from none of these issues and will
+                therefore likely be the best source of information representatives have about The Will Of The
+                People. Of course this assumes they even care about that: See the questions below for the long-term
+                answer to this one.</p>
+        </div>
+        <h5> <a (click)="show === 3 ? show = 0 : show = 3">Should I use my real name as my screen name when creating an
+                account?</a> </h5>
+        <div *ngIf="show === 3">
             <p>Please don't: It's not necessary and choosing a new screen name not only helps protect you against
                 coercion or exploitation, it also protects the rest of us from you having an outsized influence (e.g.,
                 many people would vote the way Kim Kardashian recommends, but is that really a good design?) Your
@@ -94,22 +136,12 @@
                 information is required to sign up or use the system, and the authentication process is completely
                 independent of the exact form of your screen name. </p>
         </div>
-        <h5> <a (click)="show === 3 ? show = 0 : show = 3">What other languages are/will be available?</a> </h5>
-        <div *ngIf="show === 3">
-            <p>The system currently supports Unicode and so can be used with any language. The UI, documentation, and
-                the proposals themselves will only be released in English for the foreseeable future. Best bet for
-                understanding them for non-English speakers will be to use translation software (such as <a href="https://translate.google.com/"
-                    target="_blank">https://translate.google.com/</a>, which is available by right-clicking on a page
-                in Chrome) in the short term. Eventually, support for translation will be built in. Posts can be made
-                in any language, but again, for maximum uptake pre-translating them to English using automated
-                translation software is advised for now. </p>
-        </div>
         <h5> <a (click)="show === 5 ? show = 0 : show = 5">What makes you think you can predict my vote?</a> </h5>
         <div *ngIf="show === 5">
-            <p>First a question for you: What percentage of the time do our current representatives (city council,
-                county commissioners, state or national legislature (congress and senate)) vote like we would (on
-                average) if we were in their position? proxyfor.me only has to be noticeably better than that to make
-                it a legitimate upgrade to our existing representative democracies, a low hurdle indeed!</p>
+            <p>First a question for you: What percentage of the time do your current representatives (city council,
+                county commissioners, state or national legislature (congress and senate)) vote like you would if you
+                were in their position? proxyfor.me only has to be noticeably better than that to make it a legitimate
+                upgrade to our existing representative democracies, a low hurdle indeed!</p>
             <p>As for how much better it will be, while there has been very little research in this area (predicting
                 votes on specific laws/polices using only personality characteristics) there is extensive research in
                 the domains of political science and psychology that shows that personality and political preferences
@@ -121,6 +153,33 @@
                 that most of the items will turn out not to be useful for predicting voting behavior. Those items can
                 be eliminated in future versions to save those who join later a little time in setting up their
                 accounts.</p>
+            <p>Our best estimates of correlations for votes on proposals (initiatives/referrendums) are as follows
+                based on published reports and our own modeling. For frame of reference, two people who vote exactly
+                opposite of each other on each proposal will have a correlation of -1. Voting exactly the same on every
+                issue would give a correlation of 1. If each votes randomly, correlation will be 0:</p>
+            <ul style="list-style-type:none">
+                <li>0.3 voters chosen at random</li>
+                <li>0.4 voters to the representatives they voted for</li>
+                <li>0.5 voters of a given political party chosen at random</li>
+                <li>0.6 voter-chosen delegates (Liquid Democracy)</li>
+                <li>0.8 Mini-Match in proxyfor.me</li>
+                <li>0.9+ Full-Match in proxyfor.me</li>
+            </ul>
+            <p>Some observations on the above:</p>
+            <ol>
+                <li>Correlation between voters chosen at random is non-zero because most initiatives/referrendums pass
+                    or fail by supermajorities (making them very unlike most elections for representatives, most of
+                    which are decided by very small margins).</li>
+                <li>Correlation between voters within a political party are actually higher than between voters and
+                    their chosen "representatives" due to things like <a href="https://en.wikipedia.org/wiki/Logrolling"
+                        target="_blank">logrolling</a>
+                    and corruption (whether that be overt, or in the form of indirect incentives like campaign
+                    contributions).</li>
+                <li>Correlations for even Mini-Match are higher than almost all political science research ever finds,
+                    mostly because the vast majority of political science research uses incredibly crude measures for
+                    this, most commonly consisting of a single item: "Rate your political orientation on a scale from 1
+                    to 7, where 1 is very conservative and 7 is very progressive"</li>
+            </ol>
             <p>Note that although personality and political preferences are generally fairly stable over a person's
                 lifetime, some life experiences can cause them to shift. For example, the experience of being mugged
                 generally results in increased sensitivity to danger and increased desire for government interventions
@@ -141,7 +200,7 @@
                 proxy vote is locked in after the batch calculation is done (i.e., your vote will be what the email
                 tells you it will be, regardless of any direct votes are cast after the notifications are sent out),
                 but the app and web site will continue to provide real-time updated proxy calculations to assist you in
-                casting a &quot;correct vote&quot;.</p>
+                casting a &quot;correct vote&quot; if you decide to override your proxies.</p>
             <p>The first section in the profile is a &quot;Big Five&quot; personality profile, the most widely used and
                 validated assessment of personality used by psychologists (in the scientific literature it is sometimes
                 called the Big Five Inventory (BFI) or the Five Factor Model (FFM)). The second section concerns
@@ -150,12 +209,12 @@
                 Note that nothing in this system is designed to make any claims about <em>why</em> people vote the way
                 they do: It's sufficient to match proxy voters to direct voters based on their
                 psychological/ideological similarity so long as that match can be shown to have a correlation to their
-                actual voting habits. </p>
+                actual voting behavior.</p>
         </div>
         <h5> <a (click)="show === 7 ? show = 0 : show = 7">Is this some sort of AI system?</a> </h5>
         <div *ngIf="show === 7">
-            <p>There is some similarity, but a very important difference. The similarity is that the front end of both
-                types of systems is pattern matching. The difference is that AI system generally have a learning
+            <p>There is some similarity, but also a very important difference. The similarity is that the front end of
+                both types of systems is pattern matching. The difference is that AI system generally have a learning
                 component where the pattern matching is updated when an incorrect match is made whereas the proxyfor.me
                 pattern matching system is fixed. While adding a learning component would undoubtedly improve
                 performance, doing so would bring with it an insurmountable problem: There'd be no practical way for
@@ -180,12 +239,12 @@
                 physical appearance, name familiarity, alleged experience or expertise in some area, demographic
                 information (race, gender, age, etc.) or whether the candidate is &quot;someone you'd like to have a
                 beer with&quot;. Of course the most egregious example of this is the fact that 88% of German voters
-                approved Hitler as dictator in the 1934 referendum, a fact from which one can only conclude one of
-                three things:</p>
+                approved Hitler as dictator in the 1934 referendum, a fact from which one can only conclude one of two
+                things:</p>
             <ol>
                 <li>People are just stupid and can't be trusted to make rational decisions about anything.</li>
                 <li>There's something about choosing appropriate representatives that is intrinsically extremely
-                    difficult or maybe even impossible and so is not a reasonable requirement on which to build a
+                    difficult or maybe even impossible and so this is not a reasonable requirement on which to build a
                     public policy decisionmaking system. </li>
             </ol>
             <p>proxyfor.me is founded on the second theory and so instead of allowing you to choose your own
@@ -256,7 +315,7 @@
         </h5>
         <div *ngIf="show === 10">
             <p>As it turns out, those are relatively poor predictors of political behavior. For example, while it's
-                true that people generally become more conservative as they get older, it would be a mistake to use age
+                generally true that people become more conservative as they get older, it would be a mistake to use age
                 as a matching item: While the average 70-year-old might be more conservative than they were at the age
                 of 25, they're still far more likely to vote like a moderate 25-year-old than a conservative
                 70-year-old. Using race, gender, income, education, or life experience as matching criteria have
@@ -265,7 +324,7 @@
             <p>Secondly, people are reluctant to provide certain kinds of information, which degrades the quality of
                 matches in general because any algorithm that depends on them will tend to match people on whether or
                 not they provide it rather than on the measures themselves: While being willing to publicly divulge
-                your income does probably tell us something about your personality, we don't have any evidence that
+                your income probably does tell us something about your personality, we don't have any evidence that
                 other people who are willing to do that will vote like you do.</p>
         </div>
         <h5> <a (click)="show === 11 ? show = 0 : show = 11">What, no secret ballot?</a> </h5>
@@ -273,7 +332,8 @@
             <p>Research has shown that this isn't necessary and indeed providing this ability may <em>lower</em> the
                 quality of decisions because it is typically the least informed voters who insist on a secret ballot.
                 Public voting is also required to support a proxy system and to ensure the reliability of the system.
-                See the Matchism manifesto for more on this ( <a href="http://www.matchism.org/system" target="_blank">http://www.matchism.org/system</a>).</p>
+                See the Matchism manifesto for more on this, including references (<a href="http://www.matchism.org/system"
+                    target="_blank">http://www.matchism.org/system</a>).</p>
             <p>As for claims that public voting will result in people refusing to vote for fear of reprisal or being
                 coerced into voting particular ways by threats or financial incentives, as it turns out believing that
                 these things will have a significant (or even measurable) impact on outcomes has about as much
@@ -314,8 +374,11 @@
                 by mailing a postcard to all registered voters asking them to confirm their registration. We'll do that
                 when the system gains enough users that the governments it is shadowing start to take the decisions and
                 posts made here into account in their decisionmaking. Mean time, the system does take the usual
-                security precautions (such as collecting IP addresses and machine fingerprints) to ensure that any
-                systematic attempts to cast fraudulent votes can be detected. </p>
+                security precautions (such as recording timestamps, IP addresses, and machine fingerprints, see the
+                source code for details) to
+                ensure that any systematic attempts to cast fraudulent votes can be detected. Any attempt to
+                authenticate as someone else will be reported to the approriate authorities (it's not voter fraud (yet)
+                but it's still identity theft). </p>
         </div>
         <h5> <a (click)="show === 13 ? show = 0 : show = 13">In what order do the proposals get voted on?</a> </h5>
         <div *ngIf="show === 13">
@@ -467,20 +530,21 @@
         </div>
         <h5> <a (click)="show === 22 ? show = 0 : show = 22">Who picks the proposals? Can I submit one?</a> </h5>
         <div *ngIf="show === 22">
-            <p>To bootstrap about a dozen proposals have been prepared in advance, most originated from <a href="https://www.denvergov.org/content/denvergov/en/denver-city-council.html"
-                    target="_blank">The Denver City Council website.</a> Eventually the vast majority of proposals will
-                probably come from the executive branch of government (city manager/mayor/governor/president), but
-                there will also be an &quot;initiative&quot; process which will allow The People to submit their own
-                proposals. A key component of that process will be to ensure that we don't waste The People's time with
-                poorly written or legally non-viable proposals, or those which only appeal to some extremist fringe of
-                the population and therefore would fail spectacularly in a general vote (one or more of these flaws
-                being found in nearly every petition posted to slacktivism sites such as <a href="http://change.org/"
-                    target="_blank">http://change.org</a>, <a href="http://avaaz.org/" target="_blank">http://avaaz.org</a>,
-                and <a href="https://petitions.whitehouse.gov/" target="_blank">https://petitions.whitehouse.gov</a>).
-                If you've got a proposal that you'd like to submit that doesn't have these problems (i.e., something
-                comparable in quality to the bills your state or national government votes on), or just an idea that
-                you'd like to have a proposal written for, please bring it up on the "proposals" forum on the Matchism
-                site: <a href="http://www.matchism.org/forum" target="_blank">http://www.matchism.org/forum</a>. </p>
+            <p>To bootstrap about a dozen proposals have been prepared in advance, mostly originating from <a href="https://www.denvergov.org/content/denvergov/en/denver-city-council.html"
+                    target="_blank">Denver</a> and <a href="https://bouldercolorado.gov/city-council" target="_blank">Boulder</a>
+                city councils. Eventually the vast majority of proposals will probably come from the executive branch
+                of government (city manager/mayor/governor/president), but there will also be an &quot;initiative&quot;
+                process which will allow The People to submit their own proposals. A key component of that process will
+                be to ensure that we don't waste The People's time with poorly written or legally non-viable proposals,
+                or those which only appeal to some extremist fringe of the population and therefore would fail
+                spectacularly in a general vote (one or more of these flaws being found in nearly every petition posted
+                to slacktivism sites such as <a href="http://change.org/" target="_blank">http://change.org</a>, <a
+                    href="http://avaaz.org/" target="_blank">http://avaaz.org</a>, and <a href="https://petitions.whitehouse.gov/"
+                    target="_blank">https://petitions.whitehouse.gov</a>). If you've got a proposal that you'd like to
+                submit that doesn't have these problems (i.e., something comparable in quality to the bills your city,
+                state, or national government votes on), or just an idea that you'd like to have a proposal written
+                for, please bring it up on the "proposals" forum on the Matchism site: <a href="http://www.matchism.org/forum"
+                    target="_blank">http://www.matchism.org/forum</a>. </p>
         </div>
         <h5> <a (click)="show === 23 ? show = 0 : show = 23">I detect &quot;liberal bias&quot;, both in the proposals
                 and in the comments...</a> </h5>
@@ -543,6 +607,16 @@
                 tax rates. The proxy votes will be calculated to be an aggregation of the changes proposed by the
                 direct participants.</p>
         </div>
+        <h5> <a (click)="show === 26 ? show = 0 : show = 26">What other languages are/will be available?</a> </h5>
+        <div *ngIf="show === 26">
+            <p>The system currently supports Unicode and so can be used with any language. The UI, documentation, and
+                the proposals themselves will only be released in English for the foreseeable future. Best bet for
+                understanding them for non-English speakers will be to use translation software (such as <a href="https://translate.google.com/"
+                    target="_blank">https://translate.google.com/</a>, which is available by right-clicking on a page
+                in Chrome) in the short term. Eventually, support for translation will be built in. Posts can be made
+                in any language, but again, for maximum uptake pre-translating them to English using automated
+                translation software is advised for now. </p>
+        </div>
         <h5> <a (click)="show === 27 ? show = 0 : show = 27">What's the flagging policy?</a> </h5>
         <div *ngIf="show === 27">
             <p>This being a democracy, posters must be given a very wide latitude in the methods they are allowed to
@@ -599,7 +673,7 @@
         <p>Beta 2 introduced miniprofiles (matches can be made with the most predictive 6 items in the full profile).</p>
         <p>Beta 3 updated to current versions of Angular (6) and associated development tools which allowed fixing
             bookmarking and several other issues.</p>
-        <p>Beta 4 will support authentication for Colorado voters and will have new proposals based on Boulder and
-            Denver city council votes.</p>
+        <p>Beta 4 added authentication for Colorado voters and new proposals based on Boulder and Denver city council
+            votes.</p>
     </tab>
 </tabs>

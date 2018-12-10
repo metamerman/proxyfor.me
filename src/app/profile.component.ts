@@ -1,7 +1,8 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, ChangeDetectorRef, NgZone, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { switchMap } from 'rxjs/operators';
+import * as Fingerprint2 from 'fingerprintjs2';
 
 import { amProfile, amUpdateProfile, amVote, amPost } from './classes';
 import { amAlertService } from './alert.service';
@@ -32,6 +33,8 @@ export class amProfileComponent implements OnInit {
   formP: FormGroup;
   active = true;
   showPassword = true;
+  registered = false;
+  auth = false;
 
   // <p>{{debug}}</p>
   // get debug() {
@@ -47,6 +50,8 @@ export class amProfileComponent implements OnInit {
   // }
 
   constructor(private router: Router,
+    private cd: ChangeDetectorRef,
+    private zone: NgZone,
     private fb: FormBuilder,
     private alertService: amAlertService,
     private globalService: amGlobalService,
@@ -54,9 +59,9 @@ export class amProfileComponent implements OnInit {
     private route: ActivatedRoute) { }
 
   ngOnInit(): void {
-    this.buildFormL();
     this.buildFormC();
     this.buildFormP();
+    this.buildFormL();
     this.votes = undefined;
     this.posts = undefined;
     if (!this.globalService.b5a) {
@@ -79,6 +84,7 @@ export class amProfileComponent implements OnInit {
         if (profile) {
           let newtab: string = null;
           this.profile = profile;
+          this.auth = this.registered = profile.auth;
           this.b5r = this.profile.big5.split("");
           this.ir = this.profile.will.split("");
 
@@ -93,7 +99,7 @@ export class amProfileComponent implements OnInit {
             this.doMe = false;
             newtab = "Votes";
           }
-          this.globalService.activeTab = newtab;
+          setTimeout(()=> { this.globalService.activeTab = newtab }); // defer to prevent "changed after checked" error
 
           this.buildFormL();
           this.loadVotes(); // may want to delay these eventually
@@ -147,13 +153,15 @@ export class amProfileComponent implements OnInit {
   formErrorsL = {
     'city': '',
     'state': '',
-    'country': ''
+    'cc': '',
+    'vid': '',
+    'housenum': ''
   };
 
   validationMessagesL = {
     'city': { 'required': 'City is required.' },
     'state': { 'required': 'State/Province/Canton is required.' },
-    'country': { 'required': 'Country is required.' }
+    'cc': { 'required': 'Country code is required.' }
   };
 
   formErrorsC = {
@@ -180,7 +188,9 @@ export class amProfileComponent implements OnInit {
     this.formL = this.fb.group({
       'city': [this.profile.city, Validators.required],
       'state': [this.profile.state, Validators.required],
-      'country': [this.profile.country, Validators.required]
+      'cc': [this.profile.cc || "us", Validators.required],
+      'vid': [],
+      'housenum': []
     });
   }
 
@@ -203,10 +213,30 @@ export class amProfileComponent implements OnInit {
     if (this.globalService.validate(this.formL, this.formErrorsL, this.validationMessagesL)) {
       this.globalService.myProfile.city = this.formL.value.city;
       this.globalService.myProfile.state = this.formL.value.state;
-      this.globalService.myProfile.country = this.formL.value.country;
-      this.profileService.saveProfile(this.globalService.myProfile)
-        .then(() => this.router.navigate(["/proposal/" + this.globalService.proposal.id + 'v' + this.globalService.proposal.version]))
-        .catch(e => this.handleError(e));
+      this.globalService.myProfile.cc = this.formL.value.cc;
+      if (this.formL.value.vid) {
+        this.globalService.myProfile.vid = this.formL.value.vid;
+        this.globalService.myProfile.housenum = this.formL.value.housenum;
+        this.globalService.myProfile.state = "Colorado";
+        new Fingerprint2().get(result => {
+          this.globalService.myProfile.fp = result;
+          this.profileService.saveProfile(this.globalService.myProfile)
+            .then(() => {
+              this.zone.run(() => {
+                this.globalService.myProfile.auth = true;
+                this.router.navigate(["/proposal/" + this.globalService.proposal.id + 'v' + this.globalService.proposal.version])
+              })
+            })
+            .catch(e => {
+              this.alertService.error("Profile update failed", e);
+              this.cd.detectChanges(); //hack because we're doing this outside ng context
+            })
+          })
+      }
+      else
+        this.profileService.saveProfile(this.globalService.myProfile)
+          .then(() => this.router.navigate(["/proposal/" + this.globalService.proposal.id + 'v' + this.globalService.proposal.version]))
+          .catch(e => this.alertService.error("Profile update failed", e));
     }
   }
 
