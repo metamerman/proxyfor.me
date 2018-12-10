@@ -1,0 +1,1 @@
+ng build --aot && cd dist && gzip -k *.js && cd ..
